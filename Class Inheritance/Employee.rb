@@ -1,0 +1,25 @@
+class Employee
+  attr_reader :name, :title, :salary
+  attr_accessor :boss
+
+  def initialize(name, title, salary, boss = nil)
+    @name = name
+    @title = title
+    @salary = salary
+    @boss = boss
+  end
+
+  def bonus(multiplier)
+    @salary * multiplier
+  end
+
+  def set_boss(boss)
+    @boss = boss
+    boss.set_employee(self)
+  end
+
+  def inspect
+    puts "#{name}"
+  end
+  
+end
