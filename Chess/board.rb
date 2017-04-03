@@ -25,6 +25,10 @@ class Board
     grid
   end
 
+  def in_bounds(pos)
+    pos.all? { |coord| coord.between?(0,7) }
+  end
+
   def [](pos)
     x, y = pos
     @grid[x][y]
