@@ -2,8 +2,9 @@ module Slidable
 
 
   def moves
-    move_dirs
+    valid_moves(move_dirs)
   end
+
 
   #private
 

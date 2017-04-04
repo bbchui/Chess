@@ -5,9 +5,84 @@ class Board
 
   attr_accessor :grid
 
-  def initialize
-    @grid = new_grid
+  def initialize(grid = new_grid)
+    @grid = grid
   end
+
+  def in_bounds(pos)
+    pos.all? { |coord| coord.between?(0,7) }
+  end
+
+  def [](pos)
+    x, y = pos
+    @grid[x][y]
+  end
+
+  def []=(pos, val)
+    x,y = pos
+    @grid[x][y] = val
+  end
+
+  def move_piece(start_pos, end_pos)
+    unless self[start_pos].is_a?(Piece) && !self[start_pos].is_a?(NullPiece)
+      raise RuntimeError.new("There is a piece at the end position.")
+    end
+    unless self[start_pos].moves.include?(end_pos)
+      raise RuntimeError.new("That is not a valid move!")
+    end
+    self[end_pos] = self[start_pos]
+    self[start_pos] = NullPiece.instance
+  end
+
+  def in_check?(color)
+    king_pos = []
+    @grid.each_with_index do |row, idx|
+      row.each_with_index do |el, jdx|
+        if el.is_a?(King) && el.color == color
+          king_pos += [idx, jdx]
+        end
+      end
+    end
+
+    @grid.each do |row|
+      row.each do |el|
+        unless el.is_a?(NullPiece) || el.color == color
+          pos_movs = el.moves
+          return true if pos_movs.include?(king_pos)
+        end
+      end
+    end
+    false
+  end
+
+  def checkmate?(color)
+    cant_move = @grid.flatten.all? do |el|
+      if el.color == color
+        el.valid_moves.length == 0
+      end
+    end
+    cant_move && in_check?(color)
+  end
+
+  def deep_dup
+    board_dup = Board.new([])
+
+    @grid.each do |row|
+      empty_row = []
+      row.each do |el|
+        if !el.is_a?(NullPiece)
+          empty_row << el.class.new(board_dup, el.color, el.pos.dup)
+        else
+          empty_row << NullPiece.instance
+        end
+      end
+      board_dup.grid << empty_row
+    end
+
+    board_dup
+  end
+
+  protected
 
   def new_grid
 
@@ -51,29 +126,4 @@ class Board
     grid
   end
 
-  def in_bounds(pos)
-    pos.all? { |coord| coord.between?(0,7) }
-  end
-
-  def [](pos)
-    x, y = pos
-    @grid[x][y]
-  end
-
-  def []=(pos, val)
-    x,y = pos
-    @grid[x][y] = val
-  end
-
-  def move_piece(start_pos, end_pos)
-    unless self[start_pos].is_a?(Piece) && !self[start_pos].is_a?(NullPiece)
-      raise RuntimeError.new("There is a piece at the end position.")
-    end
-    unless self[start_pos].moves.include?([end_pos])
-      debugger
-      raise RuntimeError.new("That is not a valid move!")
-    end
-    self[end_pos] = self[start_pos]
-    self[start_pos] = NullPiece.instance
-  end
 end

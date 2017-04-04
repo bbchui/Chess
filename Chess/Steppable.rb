@@ -3,7 +3,7 @@ require 'byebug'
 module Steppable
 
   def moves
-    move_diffs
+    valid_moves(move_diffs)
   end
 
   private
@@ -15,8 +15,8 @@ module Steppable
       -1.upto(1) do |idx|
         -1.upto(1) do |jdx|
           pos_mov = [pos[0] + idx, pos[1] + jdx]
-          if pos_mov[0].between?(0,7) && pos_mov[1].between?(0,7) && board[pos_move].color != self.color
-            all_moves << pos_move
+          if pos_mov[0].between?(0,7) && pos_mov[1].between?(0,7) && board[pos_mov].color != self.color
+            all_moves << pos_mov
           end
         end
       end

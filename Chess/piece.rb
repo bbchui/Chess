@@ -13,12 +13,15 @@ class Piece
     @color = color
   end
 
-  def moves
-    moves
+
+  def valid_moves(pos_movs)
+    pos_movs.reject! do |move|
+      move_into_check(move)
+    end
   end
 
   def to_s
-    "#{self.class}"
+    "#{symbol.to_s}"
   end
 
   def empty?
@@ -28,6 +31,10 @@ class Piece
   private
 
   def move_into_check(to_pos)
+    board_dup = board.deep_dup
+    board_dup.move_piece(pos, to_pos)
+    return true if board_dup.in_check?(color)
+    false
   end
 
 
@@ -88,11 +95,11 @@ class Pawn < Piece
 
 
   def moves
-    forward_steps + side_attacks
+    valid_moves(forward_steps + side_attacks)
   end
 
 
-  # private
+  private
 
   def at_start_row?
     pos[0] == 1 || pos[0] == 6
@@ -108,15 +115,18 @@ class Pawn < Piece
 
   def forward_steps
     if color == "White"
-      moves = [[pos[0], (pos[1]+1)]]
+      moves = [[pos[0] + 1, pos[1]]]
       if at_start_row?
-        moves << [pos[0], (pos[1]+2)]
+        moves << [pos[0] + 2, pos[1]]
       end
     else
-      moves = [[pos[0], (pos[1]-1)]]
+      moves = [[pos[0] - 1, pos[1]]]
       if at_start_row?
-        moves << [pos[0], (pos[1]-2)]
+        moves << [pos[0] - 2, pos[1]]
       end
+    end
+    moves.reject! do |move|
+      !board[move].is_a?(NullPiece)
     end
     moves
   end

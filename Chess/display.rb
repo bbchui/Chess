@@ -23,11 +23,7 @@ class Display
     board.grid.each_with_index do |row, idx|
       n_row = []
       row.each_with_index do |el, jdx|
-        if el.nil?
-          n_row << " "
-        else
-          n_row << "p"
-        end
+        n_row << el.to_s
         if [idx, jdx] == cursor.cursor_pos
           if cursor.selected
             n_row[jdx] = n_row[jdx].colorize(:green)
