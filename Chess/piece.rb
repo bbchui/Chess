@@ -1,6 +1,6 @@
 require_relative 'board'
-require 'Slidable'
-require 'Steppable'
+require_relative 'Slidable'
+require_relative 'Steppable'
 
 class Piece
   attr_accessor :pos
@@ -14,14 +14,11 @@ class Piece
   end
 
   def moves
+    moves
   end
 
   def to_s
     "#{self.class}"
-  end
-
-  def valid_moves
-    moves
   end
 
   def empty?
@@ -81,6 +78,7 @@ class Bishop < Piece
   end
 end
 
+require 'byebug'
 class Pawn < Piece
 
   def initialize(board, color, pos)
@@ -88,12 +86,13 @@ class Pawn < Piece
     @symbol = :P
   end
 
+
   def moves
-    foward_steps + side_attacks
+    forward_steps + side_attacks
   end
 
 
-  private
+  # private
 
   def at_start_row?
     pos[0] == 1 || pos[0] == 6

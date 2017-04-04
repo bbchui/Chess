@@ -5,7 +5,7 @@ module Slidable
     move_dirs
   end
 
-  private
+  #private
 
   def move_dirs
     if is_a?(Queen)
@@ -23,7 +23,7 @@ module Slidable
     all_moves += grow_unblocked_moves_in_dir(1, 0)
     all_moves += grow_unblocked_moves_in_dir(0, -1)
     all_moves += grow_unblocked_moves_in_dir(0, 1)
-    all_moves
+    return all_moves
   end
 
   def diagonal_dirs
@@ -35,17 +35,19 @@ module Slidable
     all_moves
   end
 
+  require 'byebug'
+
   def grow_unblocked_moves_in_dir(dx, dy)
     new_pos = [pos[0] + dx, pos[1] + dy]
 
     if new_pos[0] > 7 || new_pos[0] < 0 || new_pos[1] > 7 || new_pos[1] < 0
-      return
+      return []
     end
 
     curr_piece = board[new_pos]
 
     if !curr_piece.is_a?(NullPiece) && curr_piece.color == color
-      return
+      return []
     elsif !curr_piece.is_a?(NullPiece) && curr_piece.color != color
       return new_pos
     end
