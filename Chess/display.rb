@@ -24,7 +24,7 @@ class Display
       n_row = []
       row.each_with_index do |el, jdx|
         if el.nil?
-          n_row << "x"
+          n_row << " "
         else
           n_row << "p"
         end
