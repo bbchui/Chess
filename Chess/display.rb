@@ -20,19 +20,26 @@ class Display
   end
 
   def render
+    i = 1
     board.grid.each_with_index do |row, idx|
       n_row = []
       row.each_with_index do |el, jdx|
-        n_row << el.to_s
+        if i.even?
+          n_row << " #{el.to_s.colorize(el.color.downcase.to_sym)} ".colorize(:background => :light_black)
+        else
+          n_row << " #{el.to_s.colorize(el.color.downcase.to_sym)} ".colorize(:background => :light_red)
+        end
+        i += 1
         if [idx, jdx] == cursor.cursor_pos
           if cursor.selected
-            n_row[jdx] = n_row[jdx].colorize(:green)
+            n_row[jdx] = n_row[jdx].colorize(:background => :green)
           else
-            n_row[jdx] = n_row[jdx].colorize(:red)
+            n_row[jdx] = n_row[jdx].colorize(:background => :default)
           end
         end
       end
-      puts n_row.join(" ")
+      puts n_row.join()
+      i += 1
     end
   end
 

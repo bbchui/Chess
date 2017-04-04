@@ -27,9 +27,19 @@ class Board
     unless self[start_pos].is_a?(Piece) && !self[start_pos].is_a?(NullPiece)
       raise RuntimeError.new("There is a piece at the end position.")
     end
+    board_dup = self.deep_dup
+    board_dup.move_piece!(start_pos, end_pos)
+    if board_dup.in_check?(self[start_pos].color)
+      raise RuntimeError.new("You can't move into check.")
+    end
     unless self[start_pos].moves.include?(end_pos)
       raise RuntimeError.new("That is not a valid move!")
     end
+    self[end_pos] = self[start_pos]
+    self[start_pos] = NullPiece.instance
+  end
+
+  def move_piece!(start_pos, end_pos)
     self[end_pos] = self[start_pos]
     self[start_pos] = NullPiece.instance
   end

@@ -32,7 +32,7 @@ class Piece
 
   def move_into_check(to_pos)
     board_dup = board.deep_dup
-    board_dup.move_piece(pos, to_pos)
+    board_dup.move_piece!(pos, to_pos)
     return true if board_dup.in_check?(color)
     false
   end
@@ -135,6 +135,7 @@ class Pawn < Piece
     if color == "White"
       moves = [[(pos[0] + 1), (pos[1]+1)], [(pos[0]-1), (pos[1]+1)]]
       moves.reject! do |move|
+        debugger
         board[move].is_a?(NullPiece) || board[move].color == color
       end
     else
@@ -155,7 +156,8 @@ class NullPiece < Piece
   attr_reader :color
 
   def initialize
-    @symbol = :_
+    @symbol = " "
+    @color = "Gray"
   end
 
   def empty?
