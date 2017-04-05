@@ -9,7 +9,7 @@ class Game
   def initialize(player1, player2, board = Board.new)
     @player1 = player1
     @player2 = player2
-    @current_player = player2
+    @current_player = player1
     @board = board
     @display = Display.new(board)
   end
@@ -63,8 +63,5 @@ end
 
 if __FILE__==$PROGRAM_NAME
   game = Game.new("Ian", "Brandon")
-  game.board.move_piece([1,5],[2,5])
-  game.board.move_piece([6,4],[4,4])
-  game.board.move_piece([1,6],[3,6])
   game.play
 end
