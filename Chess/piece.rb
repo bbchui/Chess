@@ -15,9 +15,11 @@ class Piece
 
 
   def valid_moves(pos_movs)
-    pos_movs.reject! do |move|
-      move_into_check(move)
+    new_movs = []
+    pos_movs.each do |move|
+      new_movs << move unless move_into_check(move)
     end
+    new_movs
   end
 
   def to_s
@@ -95,7 +97,7 @@ class Pawn < Piece
 
 
   def moves
-    valid_moves(forward_steps + side_attacks)
+    forward_steps + side_attacks
   end
 
 
@@ -116,11 +118,17 @@ class Pawn < Piece
   def forward_steps
     if color == "White"
       moves = [[pos[0] + 1, pos[1]]]
+
+      moves.select! { |move| move[0].between?(0,7) && move[1].between?(0,7)}
+
       if at_start_row?
         moves << [pos[0] + 2, pos[1]]
       end
     else
       moves = [[pos[0] - 1, pos[1]]]
+
+      moves.select! { |move| move[0].between?(0,7) && move[1].between?(0,7)}
+
       if at_start_row?
         moves << [pos[0] - 2, pos[1]]
       end
@@ -133,13 +141,18 @@ class Pawn < Piece
 
   def side_attacks
     if color == "White"
-      moves = [[(pos[0] + 1), (pos[1]+1)], [(pos[0]-1), (pos[1]+1)]]
+      moves = [[(pos[0] + 1), (pos[1]+1)], [(pos[0]+1), (pos[1]-1)]]
+
+      moves.select! { |move| move[0].between?(0,7) && move[1].between?(0,7)}
+
       moves.reject! do |move|
-        debugger
         board[move].is_a?(NullPiece) || board[move].color == color
       end
     else
-      moves = [[(pos[0] + 1), (pos[1]-1)], [(pos[0]-1), (pos[1]-1)]]
+      moves = [[(pos[0] - 1), (pos[1]-1)], [(pos[0]-1), (pos[1]+1)]]
+
+      moves.select! { |move| move[0].between?(0,7) && move[1].between?(0,7)}
+
       moves.reject! do |move|
         board[move].is_a?(NullPiece) || board[move].color == color
       end

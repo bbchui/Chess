@@ -42,7 +42,9 @@ class Cursor
 
   def get_input
     key = KEYMAP[read_char]
-    handle_key(key)
+    input = handle_key(key)
+    # debugger
+    return input if input == :space || input == :return
   end
 
   private
@@ -78,13 +80,12 @@ class Cursor
 
   def handle_key(key)
     if key == :return || key == :space
-      # debugger
       if self.selected == false
         self.selected = true
       else
         self.selected = false
       end
-      return cursor_pos
+      return key
     elsif key == :left || key == :right || key == :up || key == :down
       update_pos(MOVES[key])
     elsif key == :ctrl_c

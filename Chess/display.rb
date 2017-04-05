@@ -1,7 +1,7 @@
 require 'colorize'
 require_relative 'board'
 require_relative 'cursor'
-
+require 'byebug'
 class Display
 
   attr_reader :board, :cursor
@@ -14,8 +14,11 @@ class Display
   def show_board
     while true
       render
-      cursor.get_input
+      input = cursor.get_input
       system("clear")
+      if input == :space || input == :return
+        break
+      end
     end
   end
 
@@ -40,6 +43,9 @@ class Display
       end
       puts n_row.join()
       i += 1
+    end
+    if cursor.selected
+      puts "#{board[cursor.cursor_pos].class}"
     end
   end
 

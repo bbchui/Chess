@@ -2,7 +2,7 @@ module Slidable
 
 
   def moves
-    valid_moves(move_dirs)
+    move_dirs
   end
 
 
@@ -20,19 +20,19 @@ module Slidable
 
   def horizontal_dirs
     all_moves = []
-    all_moves += grow_unblocked_moves_in_dir(-1, 0)
-    all_moves += grow_unblocked_moves_in_dir(1, 0)
-    all_moves += grow_unblocked_moves_in_dir(0, -1)
-    all_moves += grow_unblocked_moves_in_dir(0, 1)
+    all_moves += grow_unblocked_moves_in_dir(-1, 0)[1..-1]
+    all_moves += grow_unblocked_moves_in_dir(1, 0)[1..-1]
+    all_moves += grow_unblocked_moves_in_dir(0, -1)[1..-1]
+    all_moves += grow_unblocked_moves_in_dir(0, 1)[1..-1]
     return all_moves
   end
 
   def diagonal_dirs
     all_moves = []
-    all_moves += grow_unblocked_moves_in_dir(1, 1)
-    all_moves += grow_unblocked_moves_in_dir(1, -1)
-    all_moves += grow_unblocked_moves_in_dir(-1, -1)
-    all_moves += grow_unblocked_moves_in_dir(-1, 1)
+    all_moves += grow_unblocked_moves_in_dir(1, 1)[1..-1]
+    all_moves += grow_unblocked_moves_in_dir(1, -1)[1..-1]
+    all_moves += grow_unblocked_moves_in_dir(-1, -1)[1..-1]
+    all_moves += grow_unblocked_moves_in_dir(-1, 1)[1..-1]
     all_moves
   end
 
@@ -42,23 +42,23 @@ module Slidable
     new_pos = [pos[0] + dx, pos[1] + dy]
 
     if new_pos[0] > 7 || new_pos[0] < 0 || new_pos[1] > 7 || new_pos[1] < 0
-      return []
+      return [[]]
     end
 
     curr_piece = board[new_pos]
 
     if !curr_piece.is_a?(NullPiece) && curr_piece.color == color
-      return []
+      return [[]]
     elsif !curr_piece.is_a?(NullPiece) && curr_piece.color != color
-      return new_pos
+      return [[], new_pos]
     end
 
     dx += 1 if dx > 0
     dy += 1 if dy > 0
-    dx -= 1 if dy < 0
+    dx -= 1 if dx < 0
     dy -= 1 if dy < 0
 
-    grow_unblocked_moves_in_dir(dx, dy) + new_pos
+    grow_unblocked_moves_in_dir(dx, dy) << new_pos
   end
 
 end

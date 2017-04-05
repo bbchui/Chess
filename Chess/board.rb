@@ -33,9 +33,15 @@ class Board
       raise RuntimeError.new("You can't move into check.")
     end
     unless self[start_pos].moves.include?(end_pos)
+      debugger
       raise RuntimeError.new("That is not a valid move!")
     end
+    #update piece position
+    self[start_pos].pos = end_pos
+
+    #update board position
     self[end_pos] = self[start_pos]
+
     self[start_pos] = NullPiece.instance
   end
 
@@ -58,6 +64,9 @@ class Board
       row.each do |el|
         unless el.is_a?(NullPiece) || el.color == color
           pos_movs = el.moves
+          if pos_movs.nil?
+            pos_moves = []
+          end
           return true if pos_movs.include?(king_pos)
         end
       end
@@ -66,12 +75,15 @@ class Board
   end
 
   def checkmate?(color)
-    cant_move = @grid.flatten.all? do |el|
-      if el.color == color
-        el.valid_moves.length == 0
+    checker = true
+    @grid.each do |row|
+      row.each do |el|
+        if el.color==color && el.valid_moves(el.moves).length != 0
+          checker = false
+        end
       end
     end
-    cant_move && in_check?(color)
+    checker && in_check?(color)
   end
 
   def deep_dup
