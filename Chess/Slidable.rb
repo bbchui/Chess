@@ -36,7 +36,6 @@ module Slidable
     all_moves
   end
 
-  require 'byebug'
 
   def grow_unblocked_moves_in_dir(dx, dy)
     new_pos = [pos[0] + dx, pos[1] + dy]

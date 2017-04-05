@@ -1,6 +1,6 @@
 require_relative 'board'
 require_relative 'display'
-require 'byebug'
+
 
 class Game
 
@@ -17,7 +17,6 @@ class Game
   def play
     while true
       @display.show_board
-      # debugger
       if @display.cursor.selected
         #white
         if @current_player == @player1 && board[display.cursor.cursor_pos].color == "White"
@@ -43,9 +42,11 @@ class Game
         switch_players
 
         #checkmate?
-        break if board.checkmate?("White")
-        break if board.checkmate?("Black")
-
+        if board.checkmate?("White")
+          puts "Black wins!"
+        elsif board.checkmate?("Black")
+          puts "White wins!"
+        end
       end
 
     end

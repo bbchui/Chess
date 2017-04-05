@@ -1,5 +1,4 @@
 require_relative 'piece'
-require 'byebug'
 
 class Board
 
@@ -33,7 +32,6 @@ class Board
       raise RuntimeError.new("You can't move into check.")
     end
     unless self[start_pos].moves.include?(end_pos)
-      debugger
       raise RuntimeError.new("That is not a valid move!")
     end
     #update piece position

@@ -87,7 +87,7 @@ class Bishop < Piece
   end
 end
 
-require 'byebug'
+
 class Pawn < Piece
 
   def initialize(board, color, pos)

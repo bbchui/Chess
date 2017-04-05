@@ -43,7 +43,6 @@ class Cursor
   def get_input
     key = KEYMAP[read_char]
     input = handle_key(key)
-    # debugger
     return input if input == :space || input == :return
   end
 
@@ -93,7 +92,6 @@ class Cursor
     end
   end
 
-  require 'byebug'
 
   def update_pos(diff)
     pos = cursor_pos[0], cursor_pos[1]
